@@ -14,59 +14,60 @@ target triple = "x86_64-pc-linux-gnu"
 ; Function Attrs: norecurse nounwind readnone uwtable
 define dso_local zeroext i8 @char_to_digit(i8 zeroext) local_unnamed_addr #0 {
 ; CHECK-LABEL: @char_to_digit(
-; CHECK-NEXT:    switch i8 [[TMP0:%.*]], label [[TMP17:%.*]] [
-; CHECK-NEXT:    i8 48, label [[TMP18:%.*]]
-; CHECK-NEXT:    i8 49, label [[TMP2:%.*]]
-; CHECK-NEXT:    i8 50, label [[TMP3:%.*]]
-; CHECK-NEXT:    i8 51, label [[TMP4:%.*]]
-; CHECK-NEXT:    i8 52, label [[TMP5:%.*]]
-; CHECK-NEXT:    i8 53, label [[TMP6:%.*]]
-; CHECK-NEXT:    i8 54, label [[TMP7:%.*]]
-; CHECK-NEXT:    i8 55, label [[TMP8:%.*]]
-; CHECK-NEXT:    i8 56, label [[TMP9:%.*]]
-; CHECK-NEXT:    i8 57, label [[TMP10:%.*]]
-; CHECK-NEXT:    i8 97, label [[TMP11:%.*]]
-; CHECK-NEXT:    i8 98, label [[TMP12:%.*]]
-; CHECK-NEXT:    i8 99, label [[TMP13:%.*]]
-; CHECK-NEXT:    i8 100, label [[TMP14:%.*]]
-; CHECK-NEXT:    i8 101, label [[TMP15:%.*]]
-; CHECK-NEXT:    i8 102, label [[TMP16:%.*]]
+; CHECK-NEXT:    [[TMP2:%.*]] = sub i8 [[TMP0:%.*]], 48
+; CHECK-NEXT:    switch i8 [[TMP2]], label [[TMP18:%.*]] [
+; CHECK-NEXT:    i8 0, label [[TMP19:%.*]]
+; CHECK-NEXT:    i8 1, label [[TMP3:%.*]]
+; CHECK-NEXT:    i8 2, label [[TMP4:%.*]]
+; CHECK-NEXT:    i8 3, label [[TMP5:%.*]]
+; CHECK-NEXT:    i8 4, label [[TMP6:%.*]]
+; CHECK-NEXT:    i8 5, label [[TMP7:%.*]]
+; CHECK-NEXT:    i8 6, label [[TMP8:%.*]]
+; CHECK-NEXT:    i8 7, label [[TMP9:%.*]]
+; CHECK-NEXT:    i8 8, label [[TMP10:%.*]]
+; CHECK-NEXT:    i8 9, label [[TMP11:%.*]]
+; CHECK-NEXT:    i8 49, label [[TMP12:%.*]]
+; CHECK-NEXT:    i8 50, label [[TMP13:%.*]]
+; CHECK-NEXT:    i8 51, label [[TMP14:%.*]]
+; CHECK-NEXT:    i8 52, label [[TMP15:%.*]]
+; CHECK-NEXT:    i8 53, label [[TMP16:%.*]]
+; CHECK-NEXT:    i8 54, label [[TMP17:%.*]]
 ; CHECK-NEXT:    ]
-; CHECK:       2:
-; CHECK-NEXT:    br label [[TMP18]]
 ; CHECK:       3:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       4:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       5:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       6:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       7:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       8:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       9:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       10:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       11:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       12:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       13:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       14:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       15:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       16:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       17:
-; CHECK-NEXT:    br label [[TMP18]]
+; CHECK-NEXT:    br label [[TMP19]]
 ; CHECK:       18:
-; CHECK-NEXT:    [[TMP19:%.*]] = phi i8 [ -1, [[TMP17]] ], [ 15, [[TMP16]] ], [ 14, [[TMP15]] ], [ 13, [[TMP14]] ], [ 12, [[TMP13]] ], [ 11, [[TMP12]] ], [ 10, [[TMP11]] ], [ 9, [[TMP10]] ], [ 8, [[TMP9]] ], [ 7, [[TMP8]] ], [ 6, [[TMP7]] ], [ 5, [[TMP6]] ], [ 4, [[TMP5]] ], [ 3, [[TMP4]] ], [ 2, [[TMP3]] ], [ 1, [[TMP2]] ], [ 0, [[TMP1:%.*]] ]
-; CHECK-NEXT:    ret i8 [[TMP19]]
+; CHECK-NEXT:    br label [[TMP19]]
+; CHECK:       19:
+; CHECK-NEXT:    [[TMP20:%.*]] = phi i8 [ -1, [[TMP18]] ], [ 15, [[TMP17]] ], [ 14, [[TMP16]] ], [ 13, [[TMP15]] ], [ 12, [[TMP14]] ], [ 11, [[TMP13]] ], [ 10, [[TMP12]] ], [ 9, [[TMP11]] ], [ 8, [[TMP10]] ], [ 7, [[TMP9]] ], [ 6, [[TMP8]] ], [ 5, [[TMP7]] ], [ 4, [[TMP6]] ], [ 3, [[TMP5]] ], [ 2, [[TMP4]] ], [ 1, [[TMP3]] ], [ 0, [[TMP1:%.*]] ]
+; CHECK-NEXT:    ret i8 [[TMP20]]
 ;
   switch i8 %0, label %17 [
   i8 48, label %18

@@ -8,26 +8,16 @@ attributes #0 = { "no-jump-tables"="false" }
 define i64 @switch_common_right_bits(i8 %a) #0  {
 ; CHECK-LABEL: @switch_common_right_bits(
 ; CHECK-NEXT:  Entry:
-; CHECK-NEXT:    switch i8 [[A:%.*]], label [[SWITCHELSE:%.*]] [
-; CHECK-NEXT:    i8 123, label [[SWITCHPRONG:%.*]]
-; CHECK-NEXT:    i8 125, label [[SWITCHPRONG1:%.*]]
-; CHECK-NEXT:    i8 127, label [[SWITCHPRONG2:%.*]]
-; CHECK-NEXT:    i8 -127, label [[SWITCHPRONG3:%.*]]
-; CHECK-NEXT:    i8 -125, label [[SWITCHPRONG4:%.*]]
-; CHECK-NEXT:    ]
+; CHECK-NEXT:    [[TMP0:%.*]] = sub i8 [[A:%.*]], 123
+; CHECK-NEXT:    [[TMP1:%.*]] = call i8 @llvm.fshr.i8(i8 [[TMP0]], i8 [[TMP0]], i8 1)
+; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i8 [[TMP1]], 5
+; CHECK-NEXT:    br i1 [[TMP2]], label [[SWITCH_LOOKUP:%.*]], label [[SWITCHELSE:%.*]]
+; CHECK:       switch.lookup:
+; CHECK-NEXT:    [[SWITCH_GEP:%.*]] = getelementptr inbounds [5 x i64], [5 x i64]* @switch.table.switch_common_right_bits, i32 0, i8 [[TMP1]]
+; CHECK-NEXT:    [[SWITCH_LOAD:%.*]] = load i64, i64* [[SWITCH_GEP]]
+; CHECK-NEXT:    ret i64 [[SWITCH_LOAD]]
 ; CHECK:       SwitchElse:
-; CHECK-NEXT:    [[MERGE:%.*]] = phi i64 [ 10, [[ENTRY:%.*]] ], [ 6, [[SWITCHPRONG]] ], [ 3, [[SWITCHPRONG1]] ], [ 4, [[SWITCHPRONG2]] ], [ 2, [[SWITCHPRONG3]] ], [ 1, [[SWITCHPRONG4]] ]
-; CHECK-NEXT:    ret i64 [[MERGE]]
-; CHECK:       SwitchProng:
-; CHECK-NEXT:    br label [[SWITCHELSE]]
-; CHECK:       SwitchProng1:
-; CHECK-NEXT:    br label [[SWITCHELSE]]
-; CHECK:       SwitchProng2:
-; CHECK-NEXT:    br label [[SWITCHELSE]]
-; CHECK:       SwitchProng3:
-; CHECK-NEXT:    br label [[SWITCHELSE]]
-; CHECK:       SwitchProng4:
-; CHECK-NEXT:    br label [[SWITCHELSE]]
+; CHECK-NEXT:    ret i64 10
 ;
 Entry:
   switch i8 %a, label %SwitchElse [
@@ -166,11 +156,10 @@ SwitchElse:                                     ; preds = %Entry
 define i16 @switch_not_normalized_to_start_at_zero(i8 %a) #0  {
 ; CHECK-LABEL: @switch_not_normalized_to_start_at_zero(
 ; CHECK-NEXT:  Entry:
-; CHECK-NEXT:    [[SWITCH_TABLEIDX:%.*]] = sub i8 [[A:%.*]], 1
-; CHECK-NEXT:    [[TMP0:%.*]] = icmp ult i8 [[SWITCH_TABLEIDX]], 5
+; CHECK-NEXT:    [[TMP0:%.*]] = icmp ult i8 [[A:%.*]], 6
 ; CHECK-NEXT:    br i1 [[TMP0]], label [[SWITCH_LOOKUP:%.*]], label [[SWITCHELSE:%.*]]
 ; CHECK:       switch.lookup:
-; CHECK-NEXT:    [[SWITCH_GEP:%.*]] = getelementptr inbounds [5 x i16], [5 x i16]* @switch.table.switch_not_normalized_to_start_at_zero, i32 0, i8 [[SWITCH_TABLEIDX]]
+; CHECK-NEXT:    [[SWITCH_GEP:%.*]] = getelementptr inbounds [6 x i16], [6 x i16]* @switch.table.switch_not_normalized_to_start_at_zero, i32 0, i8 [[A]]
 ; CHECK-NEXT:    [[SWITCH_LOAD:%.*]] = load i16, i16* [[SWITCH_GEP]]
 ; CHECK-NEXT:    ret i16 [[SWITCH_LOAD]]
 ; CHECK:       SwitchElse:
