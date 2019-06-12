@@ -9,11 +9,13 @@ define i64 @switch_common_right_bits(i8 %a) #0  {
 ; CHECK-LABEL: @switch_common_right_bits(
 ; CHECK-NEXT:  Entry:
 ; CHECK-NEXT:    [[TMP0:%.*]] = sub i8 [[A:%.*]], 123
-; CHECK-NEXT:    [[TMP1:%.*]] = call i8 @llvm.fshr.i8(i8 [[TMP0]], i8 [[TMP0]], i8 1)
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i8 [[TMP1]], 5
-; CHECK-NEXT:    br i1 [[TMP2]], label [[SWITCH_LOOKUP:%.*]], label [[SWITCHELSE:%.*]]
+; CHECK-NEXT:    [[TMP1:%.*]] = lshr i8 [[TMP0]], 1
+; CHECK-NEXT:    [[TMP2:%.*]] = shl i8 [[TMP0]], 7
+; CHECK-NEXT:    [[TMP3:%.*]] = or i8 [[TMP1]], [[TMP2]]
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ult i8 [[TMP3]], 9
+; CHECK-NEXT:    br i1 [[TMP4]], label [[SWITCH_LOOKUP:%.*]], label [[SWITCHELSE:%.*]]
 ; CHECK:       switch.lookup:
-; CHECK-NEXT:    [[SWITCH_GEP:%.*]] = getelementptr inbounds [5 x i64], [5 x i64]* @switch.table.switch_common_right_bits, i32 0, i8 [[TMP1]]
+; CHECK-NEXT:    [[SWITCH_GEP:%.*]] = getelementptr inbounds [9 x i64], [9 x i64]* @switch.table.switch_common_right_bits, i32 0, i8 [[TMP3]]
 ; CHECK-NEXT:    [[SWITCH_LOAD:%.*]] = load i64, i64* [[SWITCH_GEP]]
 ; CHECK-NEXT:    ret i64 [[SWITCH_LOAD]]
 ; CHECK:       SwitchElse:
@@ -26,6 +28,10 @@ Entry:
   i8 127, label %SwitchProng2
   i8 129, label %SwitchProng3
   i8 131, label %SwitchProng4
+  i8 133, label %SwitchProng5
+  i8 135, label %SwitchProng6
+  i8 137, label %SwitchProng7
+  i8 139, label %SwitchProng8
   ]
 SwitchElse:                                       ; preds = %Entry
   ret i64 10
@@ -39,6 +45,14 @@ SwitchProng3:                                     ; preds = %Entry
   ret i64 2
 SwitchProng4:                                     ; preds = %Entry
   ret i64 1
+SwitchProng5:
+  ret i64 5
+SwitchProng6:
+  ret i64 849
+SwitchProng7:
+  ret i64 993
+SwitchProng8:
+  ret i64 342
 }
 
 define i64 @switch_clz1(i16 %a) optsize #0  {

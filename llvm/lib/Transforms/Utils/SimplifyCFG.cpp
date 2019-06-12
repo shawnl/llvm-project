@@ -5519,9 +5519,9 @@ static bool SwitchToLookupTable(SwitchInst *SI, IRBuilder<> &Builder,
 static bool ReduceSwitchRange(SwitchInst *SI, IRBuilder<> &Builder,
                               const DataLayout &DL,
                               const TargetTransformInfo &TTI) {
-  // The number of cases that need to be removed by a subtraction operation
-  // to make it worth using.
-  const unsigned SubThreshold = (SI->getFunction()->hasOptSize() ? 2 : 8);
+  // The number of cases that need to be removed by a subtraction or
+  // shift right operation to make it worth using.
+  const unsigned Threshold = (SI->getFunction()->hasOptSize() ? 2 : 8);
   auto *CondTy = cast<IntegerType>(SI->getCondition()->getType());
   unsigned BitWidth = CondTy->getIntegerBitWidth();
   if (BitWidth > 64 || !DL.fitsInLegalInteger(BitWidth))
@@ -5569,25 +5569,29 @@ static bool ReduceSwitchRange(SwitchInst *SI, IRBuilder<> &Builder,
     Shift = std::min(Shift, countTrailingZeros(V ^ BestIndexXor));
   assert(Shift < 64);
   if (Shift > 0) {
-    MadeChanges = true;
-    for (auto &V : Values)
-      V >>= Shift;
+    if (SaturatingMultiply<uint64_t>((1ULL << Shift) - 1, Values.size()) >= Threshold) {
+      MadeChanges = true;
+      for (auto &V : Values)
+        V >>= Shift;
+    } else
+      // Not worth it.
+      Shift = 0;
   }
 
   // We Xor against Values[] (any element will do) because the if we do not
-  // start at zero, but also don't meet the SubThreshold, then we still might
+  // start at zero, but also don't meet the Threshold, then we still might
   // share common rights bits, and if this transform succeeds
   // then we should insert the subtraction anyways, because the rotate trick
   // below to avoid a branch needs the shifted away bits to be zero.
 
   // Now transform the values such that they start at zero and ascend. Do not
-  // do this if the shift reduces the lowest value to less than SubThreshold,
-  // or if the subtraction is less than SubThreshold and it does not enable a
+  // do this if the shift reduces the lowest value to less than Threshold,
+  // or if the subtraction is less than Threshold and it does not enable a
   // rotate.
   uint64_t Base = 0;
-  if ((BestIndexXor >= SubThreshold && Shift == 0) ||
-      (Shift > countTrailingZeros(BestIndexXor) &&
-       Values[BestIndex] >= SubThreshold)) {
+  if ((BestIndexXor >= Threshold && Shift == 0) ||
+      ((Shift > countTrailingZeros(BestIndexXor) &&
+        Values[BestIndex] >= Threshold))) {
     Base = BestIndexXor;
     MadeChanges = true;
     for (auto &V : Values)
