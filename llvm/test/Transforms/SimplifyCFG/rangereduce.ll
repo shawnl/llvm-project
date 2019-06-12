@@ -309,14 +309,11 @@ three:
 
 define i32 @test9(i32 %a) {
 ; CHECK-LABEL: @test9(
-; CHECK-NEXT:    [[TMP1:%.*]] = lshr i32 [[A:%.*]], 1
-; CHECK-NEXT:    [[TMP2:%.*]] = shl i32 [[A]], 31
-; CHECK-NEXT:    [[TMP3:%.*]] = or i32 [[TMP1]], [[TMP2]]
-; CHECK-NEXT:    switch i32 [[TMP3]], label [[DEF:%.*]] [
-; CHECK-NEXT:    i32 9, label [[ONE:%.*]]
-; CHECK-NEXT:    i32 10, label [[TWO:%.*]]
-; CHECK-NEXT:    i32 3, label [[THREE:%.*]]
-; CHECK-NEXT:    i32 5, label [[THREE]]
+; CHECK-NEXT:    switch i32 [[A:%.*]], label [[DEF:%.*]] [
+; CHECK-NEXT:    i32 18, label [[ONE:%.*]]
+; CHECK-NEXT:    i32 20, label [[TWO:%.*]]
+; CHECK-NEXT:    i32 6, label [[THREE:%.*]]
+; CHECK-NEXT:    i32 10, label [[THREE]]
 ; CHECK-NEXT:    ]
 ; CHECK:       def:
 ; CHECK-NEXT:    [[MERGE:%.*]] = phi i32 [ 8867, [[TMP0:%.*]] ], [ 11984, [[ONE]] ], [ 1143, [[TWO]] ], [ 99783, [[THREE]] ]

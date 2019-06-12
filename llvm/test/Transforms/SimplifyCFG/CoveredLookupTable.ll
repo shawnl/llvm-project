@@ -9,12 +9,16 @@ target triple = "x86_64-apple-darwin12.0.0"
 define i3 @coveredswitch_test(i3 %input) {
 ; CHECK-LABEL: @coveredswitch_test(
 ; CHECK-NEXT:  entry:
-; CHECK-NEXT:    [[SWITCH_TABLEIDX:%.*]] = sub i3 [[INPUT:%.*]], -4
-; CHECK-NEXT:    [[SWITCH_CAST:%.*]] = zext i3 [[SWITCH_TABLEIDX]] to i24
-; CHECK-NEXT:    [[SWITCH_SHIFTAMT:%.*]] = mul i24 [[SWITCH_CAST]], 3
-; CHECK-NEXT:    [[SWITCH_DOWNSHIFT:%.*]] = lshr i24 7507338, [[SWITCH_SHIFTAMT]]
-; CHECK-NEXT:    [[SWITCH_MASKED:%.*]] = trunc i24 [[SWITCH_DOWNSHIFT]] to i3
+; CHECK-NEXT:    [[TMP0:%.*]] = icmp ult i3 [[INPUT:%.*]], -2
+; CHECK-NEXT:    br i1 [[TMP0]], label [[SWITCH_LOOKUP:%.*]], label [[BB8:%.*]]
+; CHECK:       switch.lookup:
+; CHECK-NEXT:    [[SWITCH_CAST:%.*]] = zext i3 [[INPUT]] to i18
+; CHECK-NEXT:    [[SWITCH_SHIFTAMT:%.*]] = mul i18 [[SWITCH_CAST]], 3
+; CHECK-NEXT:    [[SWITCH_DOWNSHIFT:%.*]] = lshr i18 42792, [[SWITCH_SHIFTAMT]]
+; CHECK-NEXT:    [[SWITCH_MASKED:%.*]] = trunc i18 [[SWITCH_DOWNSHIFT]] to i3
 ; CHECK-NEXT:    ret i3 [[SWITCH_MASKED]]
+; CHECK:       bb8:
+; CHECK-NEXT:    ret i3 -2
 ;
 entry:
   switch i3 %input, label %bb8 [

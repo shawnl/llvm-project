@@ -9,11 +9,10 @@ define i64 @switch_common_right_bits(i8 %a) #0  {
 ; CHECK-LABEL: @switch_common_right_bits(
 ; CHECK-NEXT:  Entry:
 ; CHECK-NEXT:    [[TMP0:%.*]] = sub i8 [[A:%.*]], 123
-; CHECK-NEXT:    [[TMP1:%.*]] = call i8 @llvm.fshr.i8(i8 [[TMP0]], i8 [[TMP0]], i8 1)
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i8 [[TMP1]], 5
-; CHECK-NEXT:    br i1 [[TMP2]], label [[SWITCH_LOOKUP:%.*]], label [[SWITCHELSE:%.*]]
+; CHECK-NEXT:    [[TMP1:%.*]] = icmp ult i8 [[TMP0]], 9
+; CHECK-NEXT:    br i1 [[TMP1]], label [[SWITCH_LOOKUP:%.*]], label [[SWITCHELSE:%.*]]
 ; CHECK:       switch.lookup:
-; CHECK-NEXT:    [[SWITCH_GEP:%.*]] = getelementptr inbounds [5 x i64], [5 x i64]* @switch.table.switch_common_right_bits, i32 0, i8 [[TMP1]]
+; CHECK-NEXT:    [[SWITCH_GEP:%.*]] = getelementptr inbounds [9 x i64], [9 x i64]* @switch.table.switch_common_right_bits, i32 0, i8 [[TMP0]]
 ; CHECK-NEXT:    [[SWITCH_LOAD:%.*]] = load i64, i64* [[SWITCH_GEP]]
 ; CHECK-NEXT:    ret i64 [[SWITCH_LOAD]]
 ; CHECK:       SwitchElse:
