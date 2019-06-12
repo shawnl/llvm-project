@@ -116,19 +116,19 @@ declare i32 @f5(i32, i32)
 
 define i32 @test4(i32 %a, i32 %b, i32 %c) {
 entry:
-  %cmp = icmp eq i32 %a, 1
+  %cmp = icmp eq i32 %a, 0
   br i1 %cmp, label %cond.end11, label %cond.false
 
 cond.false:
-  %cmp1 = icmp eq i32 %a, 2
+  %cmp1 = icmp eq i32 %a, 1
   br i1 %cmp1, label %cond.end11, label %cond.false3
 
 cond.false3:
-  %cmp4 = icmp eq i32 %a, 3
+  %cmp4 = icmp eq i32 %a, 2
   br i1 %cmp4, label %cond.end11, label %cond.false6
 
 cond.false6:
-  %cmp7 = icmp eq i32 %a, 4
+  %cmp7 = icmp eq i32 %a, 3
   %cond = select i1 %cmp7, i32 (i32, i32)* @f4, i32 (i32, i32)* @f5
   br label %cond.end11
 
